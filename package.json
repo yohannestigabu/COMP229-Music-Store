@@ -1,0 +1,24 @@
+{
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "global": "^4.4.0"
+  },
+  "scripts": {
+    "dev": "concurrently 'vite' \"nodemon server.js\"",
+    "build": "vite build",
+    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "name": "music-store-server",
+  "version": "1.0.0",
+  "description": "Music Store Server",
+  "main": "server.js",
+  "repository": "https://github.com/G2-Solutions/COMP229-Music-Store.git",
+  "author": "Dewm-Bot <alexander.rahemat@gmail.com>",
+  "license": "MIT",
+  "private": null
+}
