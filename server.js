@@ -1,22 +1,33 @@
-const express = require("express");
+const express = require('express');
 const path = require("path");
-const app = express();
+const mongoose = require('mongoose');
+const cors = require('cors');
+const userRouter = require('./server/routes/user.routes');
 const assetsRouter = require("./server/assets-router");
-app.use("/src", assetsRouter);
-app.use("/", express.static(path.join(__dirname, "music-store/public")));
-app.get("/api/v1", (req, res) => {
-    res.json({
-        project: "React and Express Boilerplate",
-        from: "Vanaldito",
-    });
+const authRoutes = require('./server/routes/auth.routes');
+
+const app = express();
+app.use(express.json());
+app.use(cors());
+app.use('/', authRoutes);
+
+mongoose.connect('mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.2', {
+  dbName: 'MusicStore'
 });
-app.get("/*", (_req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
-})
-const { PORT = 5000 } = process.env;
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function () {
+  console.log('Connected to MongoDB');
+});
+
+app.get('/', (req, res) => {
+  res.json({ message: 'Welcome to the Music Store application.' });
+});
+
+app.use('/', userRouter);
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log();
-    console.log(` App running in port ${PORT}`);
-    console.log();
-    console.log(` > Local: \x1b[36mhttp://localhost:\x1b[1m${PORT}/\x1b[0m`);
+  console.log(`Server is running on port ${PORT}`);
 });
